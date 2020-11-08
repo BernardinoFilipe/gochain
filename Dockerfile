@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine
+FROM golang:alpine
 
 EXPOSE 8000
 
@@ -7,10 +7,10 @@ COPY blockchain.html /
 
 RUN apk add --no-cache git mercurial \
     && go get -d -v \
-        github.com/lib/pq \
-        github.com/julienschmidt/httprouter \
+         github.com/lib/pq \
+           github.com/julienschmidt/httprouter \
     && apk del git mercurial
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o a.out
+RUN go build -o a.out
 
-CMD a.out
+CMD ./a.out
