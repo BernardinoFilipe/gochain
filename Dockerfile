@@ -1,7 +1,9 @@
 FROM golang:1.14-alpine
 
-WORKDIR /go/src/app
+EXPOSE 8000
+
 COPY app.go .
+COPY blockchain.html /
 
 RUN apk add --no-cache git mercurial \
     && go get -d -v \
@@ -9,6 +11,6 @@ RUN apk add --no-cache git mercurial \
         github.com/julienschmidt/httprouter \
     && apk del git mercurial
 
-RUN go build -o a.out
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o a.out
 
-CMD [./a.out]
+CMD a.out

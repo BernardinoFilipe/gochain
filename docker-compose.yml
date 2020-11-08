@@ -1,0 +1,29 @@
+version: '3.6'
+
+networks:
+  net-net:
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - 'net-net'
+    volumes:
+      - './postgres/:/var/lib/postgresql/data'
+
+  gochain:
+    environment:
+      IP: 0.0.0.0
+      PORT: 8000
+      POSTGRES_URL: postgres
+    ports:
+      - '8000:8000'
+    depends_on:
+      - 'postgres'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - 'net-net'
